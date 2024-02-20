@@ -6,4 +6,5 @@ export default {
     list: OrderList,
     edit: OrderEdit,
     icon: InboxIcon,
+    options: { label: 'Pedidos' }
 };

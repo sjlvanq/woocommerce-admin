@@ -1,1 +1,12 @@
-node_modules
+node_modules/
+
+build/
+
+src/products_old/
+
+package.json
+package*.json
+
+yarn-error.log
+
+.env

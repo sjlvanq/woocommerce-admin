@@ -1,40 +1,97 @@
-import { List, Datagrid, useRecordContext } from 'react-admin';
-import Avatar from '@mui/material/Avatar';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+import * as React from 'react';
+import { Fragment, useCallback } from 'react';
+import { Box, Chip, useMediaQuery, Divider, Grid } from '@mui/material';
+import {
+    CreateButton,
+    ExportButton,
+    FilterButton,
+    FilterForm,
+    FilterContext,
+    InputProps,
+    ListBase,
+    NumberInput,
+    Pagination,
+    ReferenceInput,
+    SearchInput,
+    SelectInput,
+    SortButton,
+    Title,
+    TopToolbar,
+    useTranslate,
+    useGetResourceLabel,
+    Create,
+    FilterList,
+    useListContext,
+    FilterLiveSearch,
+    List
+} from 'react-admin';
 
+import ImageList from './GridList';
+import ProductFilterCategoriesSel from './ProductFilterCategoriesSel';
+import ProductFilterInstockChk from './ProductFilterInstockChk';
 
-const MyUrlField = () => {
-  const record = useRecordContext();
-  return record ? (
-    <Link href={record.permalink} target='_blank' underline="none">
-      <ListItem sx={{paddingLeft: 0 }}>
-        <ListItemAvatar>
-          <Avatar variant="rounded" alt={record.name} src={record.images[0].src} sx={{ width: 40, height: 60 }} />
-        </ListItemAvatar>
-        <ListItemText primary={
-            <Typography variant="body2" color="text.primary" >
-              {record.name}
-            </Typography>
-          } 
-          secondary={
-            <small>{record.sku}</small>
-          } 
-        />
-      </ListItem>
-    </Link>
-  ) : null;
-}
+const ProductList = () => {
 
-const ProductList = () => (
-  <List sort={{ order: 'desc' }}>
-      <Datagrid>
-          <MyUrlField label='Product' />
-      </Datagrid>
-  </List>
+    const getResourceLabel = useGetResourceLabel();
+    const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const listContext = useListContext();
+    const { sort, setSort, filterValues, setFilters, displayedFilters } = listContext;
+    console.log("listContext");
+    console.log(listContext);
+    /*
+    const handleChange = useCallback(
+        (event, value) => {
+        setFilters &&
+            setFilters (
+                { ...filterValues, category: value }, 
+                displayedFilters, 
+                false
+            );
+        }, 
+        [displayedFilters, filterValues, setFilters]
+    );
+    */
+    return (
+        <ListBase perPage={12}>
+            <Title defaultTitle={getResourceLabel('products', 2)} />
+            {/*<FilterContext.Provider value={productFilters}>*/}
+            <Grid container>
+                <Grid item md={6} xs={12}>
+                <Grid container spacing={2}>                    
+                    <Grid item md={6} xs={12}>
+                        <ProductFilterCategoriesSel />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                        <FilterLiveSearch source="search" label="Buscar" />
+                    </Grid>
+                </Grid>
+                    <ProductFilterInstockChk />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                    <ListActions />
+                </Grid>
+            </Grid>
+            {/*</FilterContext.Provider>*/}
+            <Box display="flex">
+                <Box width={isSmall ? 'auto' : 'calc(100%)'}>
+                    <ImageList />
+                    <Pagination rowsPerPageOptions={[12, 24, 48, 72]} />
+                </Box>
+            </Box>
+        </ListBase>
+    );
+};
+
+export const productFilters = [
+];
+
+const ListActions = ({ isSmall }) => (
+    <TopToolbar>
+        {isSmall && <FilterButton />}
+        <SortButton fields={['name', 'price', 'sales']} label="Ordenar por" />
+            {/*<CreateButton label="Nuevo" />*/}
+            {/*<ExportButton label="Exportar" />*/}
+    </TopToolbar>
 );
 
 export default ProductList;

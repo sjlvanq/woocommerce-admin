@@ -1,6 +1,6 @@
 const authProvider = {
   login: ({ username, password }) => {
-      if (username !== 'john' || password !== '123') {
+      if (username !== 'MenuMaster' || password !== '1234') {
           return Promise.reject();
       }
       localStorage.setItem('username', username);

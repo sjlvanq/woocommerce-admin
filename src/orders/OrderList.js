@@ -38,9 +38,8 @@ const OrderList = () => (
 const orderFilters = [<TextInput source="search" alwaysOn />];
 
 const tabs = [
-    { id: 'processing', name: 'processing' },
-    { id: 'completed', name: 'completed' },
-    { id: 'refunded', name: 'refunded' },
+    { id: 'processing', name: 'En preparación' },
+    { id: 'completed', name: 'Completado' },
 ];
 
 const useGetTotals = (filterValues) => {
@@ -50,17 +49,13 @@ const useGetTotals = (filterValues) => {
     const { total: totalcompleted } = useGetList('orders', {
         filter: { ...filterValues, status: 'completed' },
     });
-    const { total: totalrefunded } = useGetList('orders', {
-        filter: { ...filterValues, status: 'refunded' },
-    });
     return {
         processing: totalprocessing,
         completed: totalcompleted,
-        refunded: totalrefunded,
     };
 };
 
-const CustomEmpty = () => (<Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">No orders found</Typography>)
+const CustomEmpty = () => (<Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">Sin pedidos</Typography>)
 
 const TabbedDatagrid = () => {
     const dateSettings = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
@@ -104,17 +99,17 @@ const TabbedDatagrid = () => {
                 <Datagrid optimized rowClick='edit' expand={<OrderShow />} empty={<CustomEmpty />} bulkActionButtons={<StatusCompleted />}>
                     <TextField 
                         source="id" 
-                        label="Order"
+                        label="Pedido"
                     />
                     <FunctionField 
-                        label="Date"
-                        render={record => `${new Date(record.date_created).toLocaleDateString('tr-TR', dateSettings)}`}
+                        label="Fecha"
+                        render={record => `${new Date(record.date_created).toLocaleDateString('es-ES', dateSettings)}`}
                     />
                     <FunctionField 
-                        label="Customer"
+                        label="Cliente"
                         render={record => `${record.billing.first_name} ${record.billing.last_name}`} />
                     <FunctionField 
-                        label="Items"
+                        label="Productos"
                         render={record => `${record.line_items.reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0)} item`}
                     />
                     <FunctionField 
@@ -126,45 +121,20 @@ const TabbedDatagrid = () => {
                 </Datagrid>
             )}
             {filterValues.status === 'completed' && (
-                <Datagrid rowClick='edit' expand={<OrderShow />} bulkActionButtons={<StatusProcessing />}>
+                <Datagrid rowClick='edit' empty={<CustomEmpty />} expand={<OrderShow />} bulkActionButtons={<StatusProcessing />}>
                     <TextField 
                         source="id" 
-                        label="Order"
+                        label="Pedido"
                     />
                     <FunctionField 
-                        label="Date"
-                        render={record => `${new Date(record.date_created).toLocaleDateString('tr-TR', dateSettings)}`}
+                        label="Fecha"
+                        render={record => `${new Date(record.date_created).toLocaleDateString('es-ES', dateSettings)}`}
                     />
                     <FunctionField 
-                        label="Customer"
+                        label="Cliente"
                         render={record => `${record.billing.first_name} ${record.billing.last_name}`} />
                     <FunctionField 
-                        label="Items"
-                        render={record => `${record.line_items.reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0)} item`}
-                    />
-                    <FunctionField 
-                        label="Total" 
-                        sx={{ fontWeight: 'bold' }} 
-                        render={record => `${record.total} ${record.currency_symbol}`} 
-                        textAlign="right"
-                    />
-                </Datagrid>
-            )}
-            {filterValues.status === 'refunded' && (
-                <Datagrid rowClick='edit' expand={<OrderShow />}>
-                    <TextField 
-                        source="id" 
-                        label="Order"
-                    />
-                    <FunctionField 
-                        label="Date"
-                        render={record => `${new Date(record.date_created).toLocaleDateString('tr-TR', dateSettings)}`}
-                    />
-                    <FunctionField 
-                        label="Customer"
-                        render={record => `${record.billing.first_name} ${record.billing.last_name}`} />
-                    <FunctionField 
-                        label="Items"
+                        label="Productos"
                         render={record => `${record.line_items.reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0)} item`}
                     />
                     <FunctionField 

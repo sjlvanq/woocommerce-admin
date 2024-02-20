@@ -1,12 +1,11 @@
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import ProductIcon from '@mui/icons-material/Collections';
 import ProductList from './ProductList';
-import ProductCreate from './ProductCreate';
 import ProductEdit from './ProductEdit';
+import ProductCreate from './ProductCreate';
 
 export default {
     list: ProductList,
     create: ProductCreate,
     edit: ProductEdit,
-    icon: LocalOfferIcon,
-    options: { label: 'Productos' }
+    icon: ProductIcon,
 };

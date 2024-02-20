@@ -30,10 +30,10 @@ const record = useRecordContext();
           </Grid>
           <Grid item xs={3}>
             <Typography component="div" variant="h6">
-              <strong>Order #{record.id}</strong>
+              <strong>Pedido #{record.id}</strong>
             </Typography>
             <Typography fontSize={14} color="text.secondary">
-              {new Date(record.date_created).toLocaleDateString('tr-TR', dateSettings)}
+              {new Date(record.date_created).toLocaleDateString('es-ES', dateSettings)}
             </Typography>
           </Grid>
           <Grid item xs={8} align='right'>
@@ -61,7 +61,7 @@ const record = useRecordContext();
           <Card sx={{ mb: 2, boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px", borderRadius: 3 }}>
             <CardContent>
               <Typography gutterBottom variant="h6" component="div">
-                <strong>Customer</strong>
+                <strong>Cliente</strong>
               </Typography>
               <CustomerField />
             </CardContent>
@@ -69,7 +69,7 @@ const record = useRecordContext();
           <Card sx={{ mb: 2, boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px", borderRadius: 3 }}>
             <CardContent>
               <Typography gutterBottom variant="h6" component="div">
-                <strong>Order Notes</strong>
+                <strong>Notas del pedido</strong>
               </Typography>
               <OrderNotes />
             </CardContent>

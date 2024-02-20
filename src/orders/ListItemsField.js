@@ -10,15 +10,16 @@ import Link from '@mui/material/Link';
 
 export default function ListItemsField() {
   const items = useRecordContext();
+  console.log(items);
   return (
     <TableContainer>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Image</TableCell>
+            <TableCell>Imagen</TableCell>
             <TableCell>Item</TableCell>
-            <TableCell>Price</TableCell>
-            <TableCell align="center">Quantity</TableCell>
+            <TableCell>Precio</TableCell>
+            <TableCell align="center">Cantidad</TableCell>
             <TableCell align="right">Total</TableCell>
           </TableRow>
         </TableHead>
@@ -26,7 +27,7 @@ export default function ListItemsField() {
           {items.line_items.map((item) => (
             <TableRow key={item.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell component="th" scope="row">
-                <Link href={`https://rays.com.tr/?s=${item.sku}&post_type=product`} target="_blank">
+                <Link href={`${process.env.REACT_APP_WOOURL}/?s=${item.sku}&post_type=product`} target="_blank">
                   <Avatar variant="rounded" src={item.image.src} sx={{ width: 60, height: 90 }} />
                 </Link>
               </TableCell>
@@ -34,10 +35,10 @@ export default function ListItemsField() {
                 {item.name}
                 <br />
                 <small>
-                  {item.sku} - {item.meta_data[0].display_value}
+                  SKU: {item.sku} - {/*item.meta_data[0].display_value*/}
                 </small>
                 <br />
-                <small>{item.id}</small>
+                <small>ID: {item.id}</small>
               </TableCell>
               <TableCell>
                 {item.subtotal} {items.currency_symbol}

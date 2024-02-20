@@ -19,10 +19,10 @@ export default function OrderShow() {
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant="body2" gutterBottom align="right">
-                                <strong>Invoice:</strong> {record.id}
+                                <strong>Factura:</strong> {record.id}
                             </Typography>
                             <Typography gutterBottom variant='body2' align="right">
-                                <strong>Date:</strong> {new Date(record.date_created).toLocaleDateString()}
+                                <strong>Fecha:</strong> {new Date(record.date_created).toLocaleDateString()}
                             </Typography>
                         </Grid>
                     </Grid>

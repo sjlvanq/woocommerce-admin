@@ -2,7 +2,7 @@
   "name": "woocommerce-admin",
   "version": "1.1.0",
   "private": true,
-  "homepage": "https://terodon.com",
+  "homepage": "https://lode.uno/cpellal/admmenu",
   "dependencies": {
     "@testing-library/jest-dom": "^6.1.0",
     "@testing-library/react": "^14.0.0",

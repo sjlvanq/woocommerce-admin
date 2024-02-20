@@ -92,10 +92,10 @@ ColorlibStepIcon.propTypes = {
 };
 
 const steps = [
-  'Processing', 
-  'Completed', 
-  'Shipped', 
-  'Delivered'
+  'En preparación', 
+  'Completado', 
+  'Enviado', 
+  'Recibido'
 ];
 
 export default function OrderStatus() {
