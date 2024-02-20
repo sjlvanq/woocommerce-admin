@@ -135,7 +135,14 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
     create: (resource, params) => {
         console.log("create. resource: "+resource + ' | params: ' + params);
         console.log(params);
-        httpClient(`${woocommerceUrl}/wp-json/wc/v3/${resource}`, {
+        let url;
+        if (resource === 'categories') {
+            url = `${woocommerceUrl}/wp-json/wc/v3/products/${resource}`;
+        }
+        else {
+            url = `${woocommerceUrl}/wp-json/wc/v3/${resource}`;
+        }
+        return httpClient(url, {
             method: 'POST',
             body: JSON.stringify(params.data),
         }).then(({ json }) => ({
@@ -166,10 +173,17 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
                 })
             )
         ).then(responses => ({ data: responses.map(({ json }) => json.id) })),
-    delete: (resource, params) =>
-        httpClient(`${woocommerceUrl}/wp-json/wc/v3/${resource}/${params.id}`, {
+    delete: (resource, params) => {
+        let url;
+        if (resource === 'categories') { 
+            url = `${woocommerceUrl}/wp-json/wc/v3/products/${resource}/${params.id}?force=true`;
+        } else {
+            url = `${woocommerceUrl}/wp-json/wc/v3/${resource}/${params.id}`;
+        }
+        return httpClient(url, {
             method: 'DELETE',
-        }).then(({ json }) => ({ data: json })),
+        }).then(({ json }) => ({ data: json }))
+    },
     deleteMany: (resource, params) =>
         Promise.all(
             params.ids.map(id =>

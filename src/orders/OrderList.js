@@ -7,7 +7,9 @@ import {
     useGetList, 
     useListContext, 
     FunctionField,
-    BulkUpdateButton
+    BulkUpdateButton,
+    TopToolbar,
+    FilterButton,
 } from 'react-admin';
 import OrderShow from './OrderShow';
 import Typography from '@mui/material/Typography';
@@ -20,13 +22,14 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 const completed = { status: "completed" };
 const processing = { status: "processing" };
 
-const ChangeStatusButtonCompleted = () => (<BulkUpdateButton label="Completed" data={completed} icon={<AssignmentTurnedInIcon/>} />);
-const ChangeStatusButtonProcessing = () => (<BulkUpdateButton label="Processing" data={processing} icon={<AccessTimeIcon/>} />);
+const ChangeStatusButtonCompleted = () => (<BulkUpdateButton label="Completado" data={completed} icon={<AssignmentTurnedInIcon/>} />);
+const ChangeStatusButtonProcessing = () => (<BulkUpdateButton label="En preparación" data={processing} icon={<AccessTimeIcon/>} />);
 const StatusCompleted = () => (<ChangeStatusButtonCompleted />);
 const StatusProcessing = () => (<ChangeStatusButtonProcessing />);
 
 const OrderList = () => (
     <List 
+        actions={<ListActions />}
         filters={orderFilters}
         filterDefaultValues={{ status: 'processing' }}
         sort={{ order: 'desc' }}
@@ -35,7 +38,13 @@ const OrderList = () => (
     </List>
 );
 
-const orderFilters = [<TextInput source="search" alwaysOn />];
+const ListActions = () => (
+    <TopToolbar>
+        <FilterButton label="Filtros" />
+    </TopToolbar>
+);
+
+const orderFilters = [<TextInput source="search" alwaysOn label="Buscar" />];
 
 const tabs = [
     { id: 'processing', name: 'En preparación' },

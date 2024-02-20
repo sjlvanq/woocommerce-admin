@@ -1,29 +1,16 @@
 import * as React from 'react';
-import { Fragment, useCallback } from 'react';
-import { Box, Chip, useMediaQuery, Divider, Grid } from '@mui/material';
+//import { useCallback } from 'react';
+import { Box, useMediaQuery, Grid } from '@mui/material';
 import {
-    CreateButton,
-    ExportButton,
     FilterButton,
-    FilterForm,
-    FilterContext,
-    InputProps,
     ListBase,
-    NumberInput,
     Pagination,
-    ReferenceInput,
-    SearchInput,
-    SelectInput,
     SortButton,
     Title,
     TopToolbar,
-    useTranslate,
     useGetResourceLabel,
-    Create,
-    FilterList,
     useListContext,
     FilterLiveSearch,
-    List
 } from 'react-admin';
 
 import ImageList from './GridList';
@@ -34,27 +21,13 @@ const ProductList = () => {
 
     const getResourceLabel = useGetResourceLabel();
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
-    const listContext = useListContext();
-    const { sort, setSort, filterValues, setFilters, displayedFilters } = listContext;
-    console.log("listContext");
-    console.log(listContext);
-    /*
-    const handleChange = useCallback(
-        (event, value) => {
-        setFilters &&
-            setFilters (
-                { ...filterValues, category: value }, 
-                displayedFilters, 
-                false
-            );
-        }, 
-        [displayedFilters, filterValues, setFilters]
-    );
-    */
+    //const listContext = useListContext();
+    //const { sort, setSort, filterValues, setFilters, displayedFilters } = listContext;
+    //console.log("listContext");
+    //console.log(listContext);
     return (
         <ListBase perPage={12}>
             <Title defaultTitle={getResourceLabel('products', 2)} />
-            {/*<FilterContext.Provider value={productFilters}>*/}
             <Grid container>
                 <Grid item md={6} xs={12}>
                 <Grid container spacing={2}>                    
