@@ -1,5 +1,4 @@
 import * as React from 'react';
-//import { useState } from 'react';
 import { Grid,InputAdornment,useMediaQuery } from '@mui/material';
 
 import {
@@ -13,10 +12,7 @@ import {
     SimpleForm,    
 } from 'react-admin';
 
-//import CustomerReferenceField from '../visitors/CustomerReferenceField';
-//import StarRatingField from '../reviews/StarRatingField';
 import Poster from './Poster';
-//import CreateRelatedReviewButton from './CreateRelatedReviewButton';
 
 const ProductTitle = () => {
     const record = useRecordContext();
@@ -24,46 +20,22 @@ const ProductTitle = () => {
     return record ? <span>Productos - {record.name}</span> : null;
 };
 
-/*
-const ProductInstockField = () => {
-    const record = useRecordContext();
-    return record ?  <FormControlLabel 
-            control={<Switch checked={record.stock_status==="instock"} />} 
-            label="Publicado" /> : null;
-};
-
-const ProductInstockField2 = () => {
-    const record = useRecordContext();
-    const [instock, setInstock] = useState(record.stock_status==='instock');
-    return record ? <BooleanInput 
-        label="Publicado" 
-        source="stock_status"
-        format={(v) => (v==='instock')}
-        parse={(v) => {return v.checked?'instock':'outofstock'; }}
-        //initialValue={(v) => v.checked?'instock':'outofstock'}
-        initialValue={record.stock_status}
-        checked={instock}
-        onChange={
-            (e)=>{
-                console.log(e);
-                console.log(record);
-                setInstock(!instock);
-            }
-        }
-    />:null;
-};
-*/
-
 const ProductCategoriesField = () => {
+    //const [] = useState();
     const record = useRecordContext();
+    console.log("Valor de record en ProductCategoriesField:");
+    console.log(record);
+    
     return record ? (
         <ReferenceInput source="category" reference="categories">
             <SelectInput 
                 optionText="name" 
-                label="Categoría" 
+                source="categories"
+                label="Categoría"
                 defaultValue={record.categories[0].id} 
                 validate={req} 
                 fullWidth 
+                resettable={true}
             />
         </ReferenceInput>
     ):null;

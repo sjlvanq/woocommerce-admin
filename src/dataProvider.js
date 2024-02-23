@@ -102,11 +102,14 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
     getMany: (resource, params) => {
         console.log("getMany. resource: " +resource + ' | params: ' + params);
         console.log(params);
-        const query = {
-            include: Array(params.ids),
-        };
-        const url = `${woocommerceUrl}/wp-json/wc/v3/${resource}?${stringify(query)}`;
-        return httpClient(url).then(({ json }) => ({ data: json }));
+        let url;
+        if (resource === 'categories') {
+            url = `${woocommerceUrl}/wp-json/wc/v3/products/${resource}`;
+        } else {
+            const query = {include: Array(params.ids),};
+            url = `${woocommerceUrl}/wp-json/wc/v3/${resource}?${stringify(query)}`;
+        }
+        return httpClient(url).then(({ json }) => {console.log(json);return ({ data: json })});
     },
     getManyReference: (resource, params) => {
         console.log("getManyReference. resource: "+resource + ' | params: ' + params);
@@ -152,6 +155,9 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
     update: (resource, params) => {
         console.log("update. resource: "+resource + ' | params: ' + params);
         console.log(params);
+        if (params.data.category) {
+            params.data.categories = [{ id: params.data.category }];
+        }
         let url;
         if (resource === 'categories') {
             url = `${woocommerceUrl}/wp-json/wc/v3/products/${resource}/${params.id}`;
