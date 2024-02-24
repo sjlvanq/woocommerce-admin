@@ -11,6 +11,8 @@ import {
     useRecordContext,
     SimpleForm,    
 } from 'react-admin';
+import { useNavigate } from 'react-router-dom';
+
 
 import Poster from './Poster';
 
@@ -43,12 +45,13 @@ const ProductCategoriesField = () => {
 
 const ProductEdit = () => {
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
+    const navigate = useNavigate();
     return (
     <Edit title={<ProductTitle />}>
     <SimpleForm >
     <Grid container columnSpacing={2}>
         <Grid item sm={1}>
-            <Button color='primary' href="../products" variant="contained" startIcon={<WestIcon sx={{mr: -2, ml: -.5}} />} />
+            <Button color='primary' onClick={()=>navigate(-1)} variant="contained" startIcon={<WestIcon sx={{mr: -2, ml: -.5}} />} />
         </Grid>
         <Grid item xs={12} sm={7}>
             <TextInput source="name" label="Nombre del producto" fullWidth validate={req} />

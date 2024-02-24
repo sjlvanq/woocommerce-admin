@@ -3,6 +3,7 @@ import { Button, Grid } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import WestIcon from '@mui/icons-material/West';
+import { useNavigate } from 'react-router-dom';
 
 import {
     Datagrid,
@@ -32,13 +33,14 @@ const ProductInstockField = (props) => {
 ProductInstockField.defaultProps = {label: 'Publicado'}
 
 const CategoryEdit = () => {
+    const navigate = useNavigate();
     //const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
     return (
     <Edit title={<CategoryTitle />}>
         <SimpleForm>
             <Grid container columnSpacing={2}>
             <Grid item>
-            <Button color='primary' href="../categories" variant="contained" startIcon={<         WestIcon sx={{mr: -2, ml: -.5}} />} />
+            <Button color='primary' onClick={()=>navigate(-1)} variant="contained" startIcon={<         WestIcon sx={{mr: -2, ml: -.5}} />} />
             </Grid>
             <Grid item>
             <TextInput source="name" />

@@ -11,6 +11,7 @@ import OrderNotes from './OrderNotes';
 import OrderTotal from './OrderTotal';
 import CreateRefundButton from './CreateRefundButton';
 import OrderStatus from './OrderStatus';
+import { useNavigate } from 'react-router-dom';
 
 const OrderEdit = () => (
     <Edit component="div">
@@ -19,14 +20,16 @@ const OrderEdit = () => (
 );
 
 const OrderForm = () => {
-const dateSettings = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-const record = useRecordContext();
+  const dateSettings = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+  const record = useRecordContext();
+  const navigate = useNavigate();
+
   return (
     <Form>
       <Box mb={2}>
         <Grid container>
           <Grid item xs={1}>
-            <Button color='primary' href="../orders" variant="contained" startIcon={<WestIcon sx={{mr: -2, ml: -.5}} />} />
+            <Button color='primary' onClick={()=>navigate(-1)} variant="contained" startIcon={<WestIcon sx={{mr: -2, ml: -.5}} />} />
           </Grid>
           <Grid item xs={3}>
             <Typography component="div" variant="h6">
