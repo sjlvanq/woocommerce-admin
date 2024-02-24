@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { Button, Grid } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
+import WestIcon from '@mui/icons-material/West';
 
 import {
     Datagrid,
@@ -34,7 +36,15 @@ const CategoryEdit = () => {
     return (
     <Edit title={<CategoryTitle />}>
         <SimpleForm>
+            <Grid container columnSpacing={2}>
+            <Grid item>
+            <Button color='primary' href="../categories" variant="contained" startIcon={<         WestIcon sx={{mr: -2, ml: -.5}} />} />
+            </Grid>
+            <Grid item>
             <TextInput source="name" />
+            </Grid>
+            </Grid>
+            
             <Labeled label="Productos" fullWidth>
                 <ReferenceManyField
                     reference="products"

@@ -26,7 +26,7 @@ const record = useRecordContext();
       <Box mb={2}>
         <Grid container>
           <Grid item xs={1}>
-            <Button color='primary' href="/orders" variant="contained" startIcon={<WestIcon sx={{mr: -2, ml: -.5}} />} />
+            <Button color='primary' href="../orders" variant="contained" startIcon={<WestIcon sx={{mr: -2, ml: -.5}} />} />
           </Grid>
           <Grid item xs={3}>
             <Typography component="div" variant="h6">
@@ -37,7 +37,7 @@ const record = useRecordContext();
             </Typography>
           </Grid>
           <Grid item xs={8} align='right'>
-            <CreateRefundButton />
+              {/*<CreateRefundButton />*/}
           </Grid>
         </Grid>
       </Box>

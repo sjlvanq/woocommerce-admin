@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Grid,InputAdornment,useMediaQuery } from '@mui/material';
-
+import { Grid,InputAdornment,useMediaQuery, Button } from '@mui/material';
+import WestIcon from '@mui/icons-material/West';
 import {
     Edit,
     NumberInput,
@@ -47,7 +47,10 @@ const ProductEdit = () => {
     <Edit title={<ProductTitle />}>
     <SimpleForm >
     <Grid container columnSpacing={2}>
-        <Grid item xs={12} sm={8}>
+        <Grid item sm={1}>
+            <Button color='primary' href="../products" variant="contained" startIcon={<WestIcon sx={{mr: -2, ml: -.5}} />} />
+        </Grid>
+        <Grid item xs={12} sm={7}>
             <TextInput source="name" label="Nombre del producto" fullWidth validate={req} />
         </Grid>
         <Grid item xs={12} sm={4}>
