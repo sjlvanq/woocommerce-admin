@@ -14,7 +14,7 @@ export default function OrderTotal() {
   const CouponTitle = () => {
     if (Object.keys(record.coupon_lines).length === 0) 
       return 
-      return <Typography variant="body2" sx={{ mt: 1.5, mb: 1.5 }}>Coupons</Typography>
+      return <Typography variant="body2" sx={{ mt: 1.5, mb: 1.5 }}>Cupones</Typography>
   }
 
   const Coupon = () => {
@@ -50,7 +50,7 @@ export default function OrderTotal() {
   const RefundTitle = () => {
     if (Object.keys(record.refunds).length === 0) 
       return 
-      return <Typography variant="body2" sx={{ color: 'error.main', mt: 1.5, mb: 1.5 }}>Refunded</Typography>
+      return <Typography variant="body2" sx={{ color: 'error.main', mt: 1.5, mb: 1.5 }}>Reintegrado</Typography>
   }
 
   const RefundTotal = () => {
@@ -71,14 +71,14 @@ export default function OrderTotal() {
   return (
     <Grid container>
       <Grid item xs={4}>
-        <Typography variant="body2" sx={{ mb: 1.5 }}>Items Subtotal</Typography>
-        <Typography variant="body2" sx={{ mt: 1.5, mb: 1.5 }}>Shipping</Typography>
+        <Typography variant="body2" sx={{ mb: 1.5 }}>Subtotal de productos</Typography>
+        <Typography variant="body2" sx={{ mt: 1.5, mb: 1.5 }}>Envío</Typography>
         <FeeTitle />
         <CouponTitle />
-        <Typography variant="body2" sx={{ fontWeight: 'bold', mt: 1.5, mb: 1.5 }}>Order Total</Typography>
+        <Typography variant="body2" sx={{ fontWeight: 'bold', mt: 1.5, mb: 1.5 }}>Total de orden</Typography>
         <Divider />
         <RefundTitle/>
-        <Typography variant="body2" sx={{ fontWeight: 'bold', mt: 1.5 }}>Net Payment</Typography>
+        <Typography variant="body2" sx={{ fontWeight: 'bold', mt: 1.5 }}>Pago neto</Typography>
       </Grid>
       <Grid item xs={3}>
         <Typography variant="body2" sx={{ mb: 1.5 }}>{productQuantity} item</Typography>
