@@ -11,9 +11,9 @@ const customer = useRecordContext();
             <br />
             {customer.billing.state} / {customer.billing.city}
             <br/>
-            E-mail: {customer.billing.email}
+            E-Mail: {customer.billing.email}
             <br/>
-            Phone: {customer.billing.phone}
+            Teléfono: {customer.billing.phone}
         </Typography>
     )
 };

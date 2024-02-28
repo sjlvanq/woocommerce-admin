@@ -50,8 +50,6 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
     getList: (resource, params) => {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
-        //console.log('dataProvider => getList. resource: ' + resource + ' | params: ' + params);
-        console.log(params);
         let url;
         if (resource === 'categories') {
             url = `${woocommerceUrl}/wp-json/wc/v3/products/${resource}?${stringify({
@@ -73,6 +71,7 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
             })}`;
         } else if (resource === 'orders') {
             const { search, status } = params.filter;
+            const { page, perPage } = params.pagination;
             url = `${woocommerceUrl}/wp-json/wc/v3/${resource}?${stringify({
                 order: order.toLowerCase(),
                 page: page,

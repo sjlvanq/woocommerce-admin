@@ -19,13 +19,14 @@ import Tab from '@mui/material/Tab';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
-const completed = { status: "completed" };
 const processing = { status: "processing" };
+const completed = { status: "completed" };
 
-const ChangeStatusButtonCompleted = () => (<BulkUpdateButton label="Completado" data={completed} icon={<AssignmentTurnedInIcon/>} />);
 const ChangeStatusButtonProcessing = () => (<BulkUpdateButton label="En preparación" data={processing} icon={<AccessTimeIcon/>} />);
-const StatusCompleted = () => (<ChangeStatusButtonCompleted />);
+const ChangeStatusButtonCompleted = () => (<BulkUpdateButton label="Completado" data={completed} icon={<AssignmentTurnedInIcon/>} />);
+
 const StatusProcessing = () => (<ChangeStatusButtonProcessing />);
+const StatusCompleted = () => (<ChangeStatusButtonCompleted />);
 
 const OrderList = () => (
     <List 
@@ -47,11 +48,15 @@ const ListActions = () => (
 const orderFilters = [<TextInput source="search" alwaysOn label="Buscar" />];
 
 const tabs = [
+    { id: 'on-hold', name: 'Pendiente de pago' },
     { id: 'processing', name: 'En preparación' },
     { id: 'completed', name: 'Completado' },
 ];
 
 const useGetTotals = (filterValues) => {
+    const { total: totalonhold } = useGetList('orders', {
+        filter: { ...filterValues, status: 'on-hold' },
+    });
     const { total: totalprocessing } = useGetList('orders', {
         filter: { ...filterValues, status: 'processing' },
     });
@@ -60,6 +65,7 @@ const useGetTotals = (filterValues) => {
     });
     return {
         processing: totalprocessing,
+        onHold: totalonhold,
         completed: totalcompleted,
     };
 };
@@ -104,6 +110,31 @@ const TabbedDatagrid = () => {
                 ))}
             </Tabs>
             <Divider />
+            {filterValues.status === 'on-hold' && (
+                <Datagrid rowClick='edit' empty={<CustomEmpty />} expand={<OrderShow />} bulkActionButtons={<StatusProcessing />}>
+                    <TextField 
+                        source="id" 
+                        label="Pedido"
+                    />
+                    <FunctionField 
+                        label="Fecha"
+                        render={record => `${new Date(record.date_created).toLocaleDateString('es-ES', dateSettings)}`}
+                    />
+                    <FunctionField 
+                        label="Cliente"
+                        render={record => `${record.billing.first_name} ${record.billing.last_name}`} />
+                    <FunctionField 
+                        label="Productos"
+                        render={record => `${record.line_items.reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0)} item`}
+                    />
+                    <FunctionField 
+                        label="Total" 
+                        sx={{ fontWeight: 'bold' }} 
+                        render={record => `${record.total} ${record.currency_symbol}`} 
+                        textAlign="right"
+                    />
+                </Datagrid>
+            )}
             {filterValues.status === 'processing' && (
                 <Datagrid optimized rowClick='edit' expand={<OrderShow />} empty={<CustomEmpty />} bulkActionButtons={<StatusCompleted />}>
                     <TextField 
@@ -130,7 +161,7 @@ const TabbedDatagrid = () => {
                 </Datagrid>
             )}
             {filterValues.status === 'completed' && (
-                <Datagrid rowClick='edit' empty={<CustomEmpty />} expand={<OrderShow />} bulkActionButtons={<StatusProcessing />}>
+                <Datagrid rowClick='edit' empty={<CustomEmpty />} expand={<OrderShow />}>
                     <TextField 
                         source="id" 
                         label="Pedido"

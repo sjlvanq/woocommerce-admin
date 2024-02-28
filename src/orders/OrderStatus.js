@@ -5,10 +5,9 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import WhereToVoteIcon from '@mui/icons-material/WhereToVote';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import Typography from '@mui/material/Typography';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
@@ -57,13 +56,13 @@ const ColorlibStepIconRoot = styled('div')(({ theme, ownerState }) => ({
 }));
 
 function ColorlibStepIcon(props) {
+  console.log(props);
   const { active, completed, className } = props;
 
   const icons = {
-    1: <AssignmentIcon fontSize='inherit' />,
-    2: <AssignmentTurnedInIcon fontSize='inherit' />,
-    3: <LocalShippingIcon fontSize='inherit' />,
-    4: <WhereToVoteIcon fontSize='inherit' />,
+    1: <PointOfSaleIcon fontSize='inherit' />,
+    2: <SoupKitchenIcon fontSize='inherit' />,
+    3: <AssignmentTurnedInIcon fontSize='inherit' />
   };
 
   return (
@@ -92,15 +91,14 @@ ColorlibStepIcon.propTypes = {
 };
 
 const steps = [
+  'Pago pendiente', 
   'En preparación', 
-  'Completado', 
-  'Enviado', 
-  'Recibido'
+  'Completado'
 ];
 
-export default function OrderStatus() {
+export default function OrderStatus({stepStatus}) {
   return (
-    <Stepper alternativeLabel activeStep={1} connector={<ColorlibConnector />}>
+    <Stepper alternativeLabel activeStep={stepStatus} connector={<ColorlibConnector />}>
       {steps.map((label) => (
         <Step key={label}>
           <StepLabel StepIconComponent={ColorlibStepIcon}>

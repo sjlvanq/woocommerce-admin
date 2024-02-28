@@ -19,6 +19,12 @@ const OrderEdit = () => (
     </Edit>
 );
 
+const statusMapping = {
+  "on-hold": 0,
+  "processing": 1,
+  "completed": 2,
+};
+
 const OrderForm = () => {
   const dateSettings = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
   const record = useRecordContext();
@@ -58,7 +64,7 @@ const OrderForm = () => {
         <Grid item xs={4}>
           <Card sx={{ mb: 2, boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px", borderRadius: 3 }}>
             <CardContent sx={{mt: 1}}>
-              <OrderStatus />
+              <OrderStatus stepStatus={statusMapping[record.status] || 0} />
             </CardContent>
           </Card>
           <Card sx={{ mb: 2, boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px", borderRadius: 3 }}>
