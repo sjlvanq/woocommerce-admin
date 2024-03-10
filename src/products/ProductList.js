@@ -16,6 +16,7 @@ import {
 import ImageList from './GridList';
 import ProductFilterCategoriesSel from './ProductFilterCategoriesSel';
 import ProductFilterInstockChk from './ProductFilterInstockChk';
+import ProductSetAllOutofstockBtn from './ProductSetAllOutofstockBtn';
 
 const ProductList = () => {
 
@@ -39,6 +40,7 @@ const ProductList = () => {
                     </Grid>
                 </Grid>
                     <ProductFilterInstockChk />
+                    <ProductSetAllOutofstockBtn />
                 </Grid>
                 <Grid item md={6} xs={12}>
                     <ListActions />
