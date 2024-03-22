@@ -15,7 +15,8 @@ import {
     SimpleForm,
     TextInput,
     useRecordContext,
-    BooleanField
+    BooleanField,
+    NumberInput
 } from 'react-admin';
 //import { useMediaQuery, Typography } from '@mui/material'
 
@@ -44,6 +45,9 @@ const CategoryEdit = () => {
             </Grid>
             <Grid item>
             <TextInput source="name" />
+            </Grid>
+            <Grid item>
+            <NumberInput source="menu_order" label="Orden" step={1} />
             </Grid>
             </Grid>
             
