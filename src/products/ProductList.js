@@ -63,7 +63,7 @@ export const productFilters = [
 const ListActions = ({ isSmall }) => (
     <TopToolbar>
         {isSmall && <FilterButton />}
-        <SortButton fields={['name', 'price', 'sales']} label="Ordenar por" />
+        <SortButton fields={['name', 'regular_price', 'sales']} label="Ordenar por" />
             {/*<CreateButton label="Nuevo" />*/}
             {/*<ExportButton label="Exportar" />*/}
     </TopToolbar>

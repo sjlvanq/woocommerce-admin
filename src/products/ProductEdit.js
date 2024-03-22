@@ -73,8 +73,8 @@ const ProductEdit = () => {
                 
                 <Grid container direction="row" columnSpacing={2}>
                     <Grid item xs={6}>
-                        <NumberInput
-                            source="price"
+                        <TextInput
+                            source="regular_price"
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">S/.</InputAdornment>

@@ -74,7 +74,7 @@ const LoadedGridList = () => {
                         subtitle={
                             <span>
                                 <NumberField
-                                    source="price"
+                                    source="regular_price"
                                     record={record}
                                     color="inherit"
                                     options={{
