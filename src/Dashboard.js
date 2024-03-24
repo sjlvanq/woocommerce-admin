@@ -19,6 +19,7 @@ import { Call, Place } from "@mui/icons-material";
 const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, onOrderStatusUpdate, isOrderStatusUpdating}) => {
   const orders = useListContext();
   const [update, { isLoading, error }] = useUpdate();
+  const [isLoadingButtons, setIsLoadingButtons] = useState({});
   useEffect(() => {
 	  //console.log("useEffect isOrderStatusUpdating "+orderStatus+" con valor "+(isOrderStatusUpdating?"verdadero":"falso"));
 	  orders.refetch();
@@ -27,6 +28,21 @@ const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, onOrderStatu
 	  //console.log("useEffect isLoading "+orderStatus+" con valor "+(isLoading?"verdadero":"falso"));
 	  onOrderStatusUpdate();
   }, [isLoading]);
+  const handleUpdateStatusClick = async (item) => {
+	try {
+		const newStatus = orderStatus === 'on-hold' ? 'processing' : 'completed';
+		setIsLoadingButtons(prevState => ({
+		  ...prevState,
+		  [item.id]: true
+		}));
+		await update('orders', { id: item.id, data: { status: newStatus }, previousData: item });
+	} finally {
+		setIsLoadingButtons(prevState => ({
+			...prevState,
+			[item.id]: true
+		}));
+	}
+  }
   return (
     <>
       {orders.data &&
@@ -64,11 +80,10 @@ const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, onOrderStatu
                 </TableCell>
 			  ))}
 			  <TableCell>
-					{isLoading ? 
+					{isLoadingButtons[item.id] ? 
 						<CircularProgress /> :
 						<Button onClick={() => {
-							const newStatus = orderStatus === 'on-hold' ? 'processing' : 'completed';
-							update('orders', { id: item.id, data: { status: newStatus }, previousData: item });
+							handleUpdateStatusClick(item)
 						}}>
 							{orderStatus === 'on-hold' && <>Confirmar</>}
 							{orderStatus === 'processing' && <>Listo para la entrega</>}
