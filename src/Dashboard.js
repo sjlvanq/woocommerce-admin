@@ -65,6 +65,7 @@ const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, onOrderStatu
                     <>{item.shipping.address_1} {item.shipping.address_2}</>
                   )}
                   {column.key === 'phone' && <>{item.shipping.phone}</>}
+				  {column.key === 'payment_method_title' && <>{item.payment_method_title}</>}
                   {column.key === 'total' && (
                     <>S/ {item.total}</>
                   )}
@@ -168,7 +169,7 @@ const Dashboard = () => {
 		<Box 
 			component="img"
 			src={receiptSrc} 
-			style={{maxWidth:'70%'}}
+			style={{maxWidth:'70%', height: '100%'}}
 		/>
 	</Modal>
 	<Grid container direction="row" justifyContent="center">
@@ -183,7 +184,7 @@ const Dashboard = () => {
 					orderStatus="on-hold" 
 					columns={[
 						{key:'name', label: 'Nombre'},
-						{key:'phone', label: 'Teléfono', align: 'right'},
+						{key:'phone', label: 'Teléfono', align: 'center'},
 						{key:'total', label: 'Total pedido', align: 'right'},
 						{key:'receipt', label: 'Comprobante', align: 'center'},
 					]}
@@ -199,7 +200,8 @@ const Dashboard = () => {
 					columns={[
 						{key:'name', label: 'Nombre'},
 						{key:'address', label: 'Dirección', align: 'right'},
-						{key:'phone', label: 'Teléfono', align: 'right'},
+						{key:'phone', label: 'Teléfono', align: 'center'},
+						{key:'payment_method_title', label: 'Método de pago', align: 'center'},
 					]}
 					onOrderStatusUpdate={handleOrderStatusUpdate}
 					isOrderStatusUpdating={isOrderStatusUpdating}
