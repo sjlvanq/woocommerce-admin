@@ -22,14 +22,15 @@ const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, onOrderStatu
   const [isLoadingButtons, setIsLoadingButtons] = useState({});
   const [ordersWithWApp, setOrdersWithWApp] = useState({}); // Sólo on-hold
   useEffect(() => {
+	  //Recibe señal de que la otra tabla se está actualizando
 	  //console.log("useEffect isOrderStatusUpdating "+orderStatus+" con valor "+(isOrderStatusUpdating?"verdadero":"falso"));
 	  orders.refetch();
   }, [isOrderStatusUpdating]);
   useEffect(() => {
+	  //Hace llegar a la otra tabla la señal de actualización
 	  //console.log("useEffect isLoading "+orderStatus+" con valor "+(isLoading?"verdadero":"falso"));
 	  onOrderStatusUpdate();
   }, [isLoading]);
-  
   const handleWAppCheck = (item) => {
 	  setOrdersWithWApp(prevState => ({
 		  ...prevState,
