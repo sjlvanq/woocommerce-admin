@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Grid, Typography, Button} from "@mui/material";
+import { Grid, Typography, Button, Checkbox, FormControlLabel } from "@mui/material";
 import Modal from '@mui/material/Modal';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -20,6 +20,7 @@ const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, onOrderStatu
   const orders = useListContext();
   const [update, { isLoading, error }] = useUpdate();
   const [isLoadingButtons, setIsLoadingButtons] = useState({});
+  const [ordersWithWApp, setOrdersWithWApp] = useState({}); // Sólo on-hold
   useEffect(() => {
 	  //console.log("useEffect isOrderStatusUpdating "+orderStatus+" con valor "+(isOrderStatusUpdating?"verdadero":"falso"));
 	  orders.refetch();
@@ -28,6 +29,14 @@ const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, onOrderStatu
 	  //console.log("useEffect isLoading "+orderStatus+" con valor "+(isLoading?"verdadero":"falso"));
 	  onOrderStatusUpdate();
   }, [isLoading]);
+  
+  const handleWAppCheck = (item) => {
+	  setOrdersWithWApp(prevState => ({
+		  ...prevState,
+		  [item.id]: !prevState[item.id]
+	  })
+	);
+  }
   const handleUpdateStatusClick = async (item) => {
 	try {
 		const newStatus = orderStatus === 'on-hold' ? 'processing' : 'completed';
@@ -36,6 +45,12 @@ const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, onOrderStatu
 		  [item.id]: true
 		}));
 		await update('orders', { id: item.id, data: { status: newStatus }, previousData: item });
+		// Mensaje Whatsapp
+		const wapp_text_pago = "Hola, " + item.shipping.first_name + ". Hemos aprobado el pago de su pedido a DON GULA. Pronto lo recibirá en " + item.shipping.address_1 + ". Muchas gracias";
+		if( newStatus === 'processing' && ordersWithWApp[item.id] ){
+			//https://web.whatsapp.com/send/?phone=93813351309&text=Hola%2C+Silvano+Emanuel.+Hemos+aprobado+el+pago+de+su+pedido+a+DON+GULA.+Pronto+lo+recibir%C3%A1+en+Ricardo+Palma+181.+Muchas+gracias&type=phone_number&app_absent=0
+			window.open('https://web.whatsapp.com/send/?phone=' + item.shipping.phone + '&text=' + wapp_text_pago + '&type=phone_number&app_absent=1', '_blank');
+		}
 	} finally {
 		setIsLoadingButtons(prevState => ({
 			...prevState,
@@ -83,12 +98,29 @@ const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, onOrderStatu
 			  <TableCell>
 					{isLoadingButtons[item.id] ? 
 						<CircularProgress /> :
+						<>
 						<Button onClick={() => {
 							handleUpdateStatusClick(item)
 						}}>
 							{orderStatus === 'on-hold' && <>Confirmar</>}
 							{orderStatus === 'processing' && <>Listo para la entrega</>}
 						</Button>
+						{orderStatus === 'on-hold' 
+							&& item.meta_data.find(meta => meta.key === '_whatsapp')
+							&& item.meta_data.find(meta => meta.key === '_whatsapp').value === 'no'
+							&& 	<>
+								(&nbsp;<FormControlLabel 
+									control={
+										<Checkbox
+											checked={ordersWithWApp[item.id]||false}
+											onChange={()=>handleWAppCheck(item)}
+											sx={{ '& .MuiSvgIcon-root': { fontSize: 14 } }} />
+									} 
+									label={<Typography sx={{ fontSize: 12 }}>WhatsApp</Typography>}
+								/>&nbsp;)
+								</>
+						}
+						</>
 					}
 			  </TableCell>
             </TableRow>
