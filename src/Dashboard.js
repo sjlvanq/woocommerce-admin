@@ -215,9 +215,10 @@ const Dashboard = () => {
 		setReceiptViewerOpen(false);
 	}
 	const handleNewOrders = (orders) => {
-		console.log("Estoy en handleNewOrders");
-		console.log(orders);
 		setNewOrders(newOrders.concat(orders));
+	}
+	const handleNewOrdersModalClose = () => {
+		setNewOrders([]);
 	}
 	const handleNewCodOrderSendWapp = function (order){
 		const wapp_text_pago = "Hola, " + order.shipping.first_name + ". DON GULA ha recibido su pedido y pronto lo estaremos enviando a " + order.shipping.address_1 + ". Muchas gracias";
@@ -272,7 +273,7 @@ const Dashboard = () => {
 			</CardContent>
 			<Divider />
 			<CardActions>
-			  <Button>Aceptar</Button>
+			  <Button onClick={handleNewOrdersModalClose}>Aceptar</Button>
 			</CardActions>
 		</Card>
 	</Modal>
