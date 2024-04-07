@@ -14,6 +14,10 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import React from 'react';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
 
 import { Labeled, ListBase, Datagrid, TextField, ReferenceManyField, SimpleList, 
 useRecordContext, useListContext, useUpdate, useGetList } from "react-admin";
@@ -147,15 +151,36 @@ const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick,
 					}
 			  </TableCell>
             </TableRow>
-            {item.line_items.map(product => (
-              <React.Fragment key={product.id}>
-                <TableRow sx={{backgroundColor:'#eee'}}>
-                  <TableCell colSpan={columns.length+1}> {/* columns + 'Acciones' */}
-					  &bull;&nbsp;{product.name} x {product.quantity} 
-                  </TableCell>
-                </TableRow>
-              </React.Fragment>
-            ))}
+            <TableRow sx={{backgroundColor:'#eee'}}>
+				<TableCell colSpan={columns.length+1}> {/* = columns + 'Acciones' */}
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <List dense>
+              {item.line_items.map((product, index) => (
+                index % 2 === 0 && (
+                  <ListItem key={index} sx={{ borderBottom: "1px dotted #bbb" }}>
+                    <ListItemText primary={product.name} />
+                    <ListItemSecondaryAction>{product.quantity}</ListItemSecondaryAction>
+                  </ListItem>
+                )
+              ))}
+            </List>
+          </Grid>
+          <Grid item xs={6}>
+            <List dense>
+              {item.line_items.map((product, index) => (
+                index % 2 !== 0 && (
+                  <ListItem key={index} sx={{ borderBottom: "1px dotted #bbb" }}>
+                    <ListItemText primary={product.name} />
+                    <ListItemSecondaryAction>{product.quantity}</ListItemSecondaryAction>
+                  </ListItem>
+                )
+              ))}
+            </List>
+          </Grid>
+        </Grid>
+				</TableCell>
+			</TableRow>
           </React.Fragment>
         ))}
     </>
@@ -300,7 +325,7 @@ const Dashboard = () => {
 		<Grid container direction="column" justifyContent="center" style={{textAlign:"center"}}>
 			<Grid item>
 				<ListOrders 
-					label="Pedidos para confirmar cancelación" 
+					label={<Typography variant="h6">Pedidos para confirmar cancelación</Typography>} 
 					orderStatus="on-hold" 
 					columns={[
 						{key:'name', label: 'Nombre'},
@@ -316,7 +341,7 @@ const Dashboard = () => {
 			</Grid>
 			<Grid item>
 				<ListOrders 
-					label="Pedidos para entregar" 
+					label={<Typography variant="h6">Pedidos para entregar</Typography>} 
 					orderStatus="processing" 
 					columns={[
 						{key:'name', label: 'Nombre'},
