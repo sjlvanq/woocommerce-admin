@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Grid, Typography, Button, Checkbox, FormControlLabel } from "@mui/material";
+import { Grid, Typography, Button, Checkbox, FormControlLabel, Divider } from "@mui/material";
 import Modal from '@mui/material/Modal';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,17 +10,23 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 import React from 'react';
 
 import { Labeled, ListBase, Datagrid, TextField, ReferenceManyField, SimpleList, 
 useRecordContext, useListContext, useUpdate, useGetList } from "react-admin";
 import { Call, Place } from "@mui/icons-material";
 
-const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, onOrderStatusUpdate, isOrderStatusUpdating}) => {
+const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, 
+						  onOrderStatusUpdate, isOrderStatusUpdating,
+						  onNewOrders}) => {
   const orders = useListContext();
   const [update, { isLoading, error }] = useUpdate();
   const [isLoadingButtons, setIsLoadingButtons] = useState({});
   const [ordersWithWApp, setOrdersWithWApp] = useState({}); // Sólo on-hold
+  const [prevLastOrderId, setPrevLastOrderId] = useState(0);
   useEffect(() => {
 	  //Recibe señal de que la otra tabla se está actualizando
 	  //console.log("useEffect isOrderStatusUpdating "+orderStatus+" con valor "+(isOrderStatusUpdating?"verdadero":"falso"));
@@ -31,6 +37,22 @@ const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, onOrderStatu
 	  //console.log("useEffect isLoading "+orderStatus+" con valor "+(isLoading?"verdadero":"falso"));
 	  onOrderStatusUpdate();
   }, [isLoading]);
+  useEffect(() => {
+	  //Comprueba si hay pedidos nuevos
+	  if(orders.data){
+	  //Obtener el valor más alto para orders.data[].id
+	    const currentLastOrderId = orders.data.reduce((max, obj) => obj.id > max ? obj.id : max, 0);
+	    if(prevLastOrderId===0){
+	      //Omite la actualización inicial (carga)
+	      setPrevLastOrderId(currentLastOrderId);
+	    } else if(prevLastOrderId < currentLastOrderId) {
+		  const nuevasOrdenes = orders.data.filter((orden) => orden.id > prevLastOrderId)
+		  setPrevLastOrderId(currentLastOrderId);
+		  onNewOrders(nuevasOrdenes);
+		}
+	    //console.log(orders);
+	  }
+  }, [orders]);
   const handleWAppCheck = (item) => {
 	  setOrdersWithWApp(prevState => ({
 		  ...prevState,
@@ -140,7 +162,10 @@ const ListOrderItems = ({ orderStatus, columns, onViewReceiptClick, onOrderStatu
   );
 };
 
-const ListOrders = ({label, orderStatus, columns, onViewReceiptClick, isOrderStatusUpdating, onOrderStatusUpdate }) => {	
+const ListOrders = ({label, orderStatus, columns, onViewReceiptClick, 
+					 isOrderStatusUpdating, onOrderStatusUpdate,
+					 onNewOrders
+					}) => {
   return (
 	<ListBase resource={"orders"} filter={{status: orderStatus}} queryOptions={{ refetchInterval: 5000 }} >
 		<Labeled label={label} fullWidth sx={{ '& .RaLabeled-label': {textAlign:'left'} }}>
@@ -165,6 +190,7 @@ const ListOrders = ({label, orderStatus, columns, onViewReceiptClick, isOrderSta
 						onViewReceiptClick={onViewReceiptClick} 
 						onOrderStatusUpdate={onOrderStatusUpdate}
 						isOrderStatusUpdating={isOrderStatusUpdating}
+						onNewOrders={onNewOrders}
 					/>
 				</TableBody>
 			  </Table>
@@ -175,12 +201,12 @@ const ListOrders = ({label, orderStatus, columns, onViewReceiptClick, isOrderSta
 
 const Dashboard = () => {
 	const [receiptViewerOpen, setReceiptViewerOpen] = useState(false);
+	const [newOrders, setNewOrders] = useState([]);
 	const [receiptSrc, setReceiptSrc] = useState('');
 	const [isOrderStatusUpdating, setIsOrderStatusUpdating] = useState(false);
 	const handleOrderStatusUpdate = () => {
 		setIsOrderStatusUpdating(!isOrderStatusUpdating);
-	}
-	
+	}	
 	const handleReceiptViewerOpen = (src) => {
 		setReceiptSrc(src);
 		setReceiptViewerOpen(true);
@@ -188,8 +214,68 @@ const Dashboard = () => {
 	const handleReceiptViewerClose = (reason) => {
 		setReceiptViewerOpen(false);
 	}
+	const handleNewOrders = (orders) => {
+		console.log("Estoy en handleNewOrders");
+		console.log(orders);
+		setNewOrders(newOrders.concat(orders));
+	}
+	const handleNewCodOrderSendWapp = function (order){
+		const wapp_text_pago = "Hola, " + order.shipping.first_name + ". DON GULA ha recibido su pedido y pronto lo estaremos enviando a " + order.shipping.address_1 + ". Muchas gracias";
+		window.open('https://web.whatsapp.com/send/?phone=' + order.shipping.phone + '&text=' + wapp_text_pago + '&type=phone_number&app_absent=1', '_blank');
+	}
 	return (
 	<>
+	<Modal
+	  open={newOrders.length > 0}
+      style={{
+        display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+      }}
+	>
+		<Card>
+			<CardContent>
+			  <Typography variant="h5" color="text.primary" gutterBottom>
+				¡Nuevos pedidos! ({newOrders.length})
+			  </Typography>
+  			  <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+			    <Table aria-label="Nuevos pedidos" stickyHeader>
+				  <TableHead sx={{backgroundColor:'#dde'}}>
+				    <TableRow>
+					  <TableCell>Cliente</TableCell>
+					  <TableCell>Compra</TableCell>
+					  <TableCell>Método de pago</TableCell>
+				    </TableRow>
+				  </TableHead>
+				  <TableBody>
+				  {newOrders.length > 0 && newOrders.map(item => (
+				    <TableRow key={item.id}>
+					  <TableCell>{item.shipping.first_name} {item.shipping.last_name}</TableCell>
+					  <TableCell>S/ {item.total}</TableCell>
+					  <TableCell>
+						{item.payment_method_title}
+						{item.payment_method === 'cod' &&
+						<>
+							<br />
+							<Button size="small" onClick={
+								() => handleNewCodOrderSendWapp(item)
+							}
+							>Enviar WApp</Button>
+						</>
+						}
+					  </TableCell>
+				    </TableRow>
+				  ))}
+				  </TableBody>
+			    </Table>
+			  </TableContainer>
+			</CardContent>
+			<Divider />
+			<CardActions>
+			  <Button>Aceptar</Button>
+			</CardActions>
+		</Card>
+	</Modal>
 	<Modal
 	  open={receiptViewerOpen}
 	  onClose={handleReceiptViewerClose}
@@ -224,6 +310,7 @@ const Dashboard = () => {
 					onViewReceiptClick={(src) => handleReceiptViewerOpen(src)}
 					onOrderStatusUpdate={handleOrderStatusUpdate}
 					isOrderStatusUpdating={isOrderStatusUpdating}
+					onNewOrders={handleNewOrders}
 				/>
 			</Grid>
 			<Grid item>
@@ -238,6 +325,7 @@ const Dashboard = () => {
 					]}
 					onOrderStatusUpdate={handleOrderStatusUpdate}
 					isOrderStatusUpdating={isOrderStatusUpdating}
+					onNewOrders={handleNewOrders}
 				/>
 			</Grid>
 		</Grid>
