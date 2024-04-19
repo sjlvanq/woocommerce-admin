@@ -26,7 +26,7 @@ const App = () => (
             dashboard={Dashboard}
         >
             <Resource name="products" {...products} />
-            <Resource name="categories" {...categories} />
+            <Resource name="products/categories" {...categories} />
             <Resource name="orders" {...orders} />
             <Resource name="orders/:id/refunds" {...refunds} />
         </Admin>

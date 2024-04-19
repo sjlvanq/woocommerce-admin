@@ -8,7 +8,7 @@ const CategoryRefField = (_: { source: string }) => {
     return record ? (
         <MuiLink
             component={Link}
-            to={`/categories/${record.id}`}
+            to={`/products/categories/${record.id}`}
             underline="none"
         >
             {record.name}

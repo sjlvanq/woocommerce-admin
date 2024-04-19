@@ -79,6 +79,8 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
                 search: search,
                 status: status
             })}`;
+        } else {
+            url = `${woocommerceUrl}/wp-json/wc/v3/${resource}`;
         }
         return httpClient(url).then(({ headers, json }) => ({
             data: json,

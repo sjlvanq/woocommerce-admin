@@ -44,7 +44,7 @@ const CategoryList = () => {
             linkType={record => "edit"}
             /*rowSx={record => ({ backgroundColor: record.nb_views >= 500 ? '#efe' : 'white' })}*/
         />
-        : <Datagrid>
+        : <Datagrid basePath="/products/categories">
             <CategoryRefField source="name" label="Nombre" />
             <NumberField source="count" label="Productos" />
             <NumberField source="menu_order" label="Posición" />

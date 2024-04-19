@@ -325,7 +325,12 @@ const Dashboard = () => {
 		<Grid container direction="column" justifyContent="center" style={{textAlign:"center"}}>
 			<Grid item>
 				<ListOrders 
-					label={<Typography variant="h6">Pedidos para confirmar cancelación</Typography>} 
+                    label={
+                        <>
+                            <Typography variant="h6">Pedidos para confirmar cancelación</Typography>
+                            <Typography>Pedidos pagados por transferencia</Typography>
+                        </>
+                    }
 					orderStatus="on-hold" 
 					columns={[
 						{key:'name', label: 'Nombre'},
@@ -339,9 +344,16 @@ const Dashboard = () => {
 					onNewOrders={handleNewOrders}
 				/>
 			</Grid>
-			<Grid item>
+			<Grid item sx={{marginTop:'1em'}}>
 				<ListOrders 
-					label={<Typography variant="h6">Pedidos para entregar</Typography>} 
+                    label={
+                        <>
+                            <Typography variant="h6">Pedidos para entregar</Typography>
+                            <Typography>
+                                Pago en efectivo o transferencia verificada
+                            </Typography>
+                        </>
+                    }
 					orderStatus="processing" 
 					columns={[
 						{key:'name', label: 'Nombre'},
