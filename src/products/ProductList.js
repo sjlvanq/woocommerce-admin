@@ -22,10 +22,6 @@ const ProductList = () => {
 
     const getResourceLabel = useGetResourceLabel();
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
-    //const listContext = useListContext();
-    //const { sort, setSort, filterValues, setFilters, displayedFilters } = listContext;
-    //console.log("listContext");
-    //console.log(listContext);
     return (
         <ListBase perPage={12}>
             <Title defaultTitle={getResourceLabel('products', 2)} />
@@ -62,8 +58,10 @@ export const productFilters = [
 
 const ListActions = ({ isSmall }) => (
     <TopToolbar>
+    {/*
         {isSmall && <FilterButton />}
-        <SortButton fields={['name', 'regular_price', 'sales']} label="Ordenar por" />
+        <SortButton fields={['name', 'price', 'sales']} label="Ordenar por" />
+    */}
             {/*<CreateButton label="Nuevo" />*/}
             {/*<ExportButton label="Exportar" />*/}
     </TopToolbar>
