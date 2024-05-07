@@ -15,7 +15,7 @@ const ProductFilterCategoriesSel = () => {
 	};
 
     const { data, ids, status, error } = useGetList(
-        'categories',
+        'products/categories',
         { field: 'menu_order', order: 'ASC' }
     );
 	
