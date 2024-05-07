@@ -29,7 +29,7 @@ const ProductCategoriesField = () => {
     console.log(record);
     
     return record ? (
-        <ReferenceInput source="category" reference="categories">
+        <ReferenceInput source="category" reference="products/categories">
             <SelectInput 
                 optionText="name" 
                 source="categories"
