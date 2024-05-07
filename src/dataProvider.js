@@ -8,18 +8,6 @@ import { stringify } from 'query-string';
  *
  * @example
  *
- * getList          => GET https://example.com/orders?order=asc&page=1&per_page=10&search=example&status=completed
- * getOne           => GET https://example.com/orders/123
- * getMany          => GET https://example.com/orders?include=123,456,789
- * getManyReference => GET https://example.com/orders/123/notes
- * create           => POST https://example.com/orders
- * update           => PUT https://example.com/orders/123
- * updateMany       => PUT https://example.com/orders/123, PUT http://example.com/orders/456, PUT http://example.com/orders/789
- * delete           => DELETE https://example.com/orders/123
- * deleteMany       => DELETE https://example.com/orders/123, DELETE https://example.com/orders/456, DELETE https://example.com/orders/789
- *
- * @example
- *
  * import { Admin, Resource, ListGuesser, EditGuesser } from 'react-admin';
  * import woocommerceData from 'ra-data-woocommerce';
  * 
@@ -51,18 +39,11 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
         let url;
-        if (resource === 'categories') {
-            url = `${woocommerceUrl}/wp-json/wc/v3/products/${resource}?${stringify({
-                order: order.toLowerCase(),
-                order_by: field,
-                page: page,
-                per_page: perPage,
-            })}`;
-        } else if (resource === 'products') {
+        if (resource === 'products') {
             const { search, category, stock_status } = params.filter;
             url = `${woocommerceUrl}/wp-json/wc/v3/${resource}?${stringify({
                 order: order.toLowerCase(),
-                order_by: field,
+                orderby: field,
                 page: page,
                 per_page: perPage,
                 search: search,
@@ -80,7 +61,12 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
                 status: status
             })}`;
         } else {
-            url = `${woocommerceUrl}/wp-json/wc/v3/${resource}`;
+            url = `${woocommerceUrl}/wp-json/wc/v3/${resource}?${stringify({
+                order: order.toLowerCase(),
+                orderby: field,
+                page: page,
+                per_page: perPage,
+            })}`;
         }
         return httpClient(url).then(({ headers, json }) => ({
             data: json,
@@ -88,33 +74,19 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
         }));
     },
     getOne: (resource, params) => {
-        console.log('dataProvider => getOne. resource: ' + resource + ' | params: ' + params);
-        console.log(params);
         let url;
-        if (resource === 'categories') {
-            url = `${woocommerceUrl}/wp-json/wc/v3/products/${resource}/${params.id}`
-        } else {
-            url = `${woocommerceUrl}/wp-json/wc/v3/${resource}/${params.id}`
-        }
+        url = `${woocommerceUrl}/wp-json/wc/v3/${resource}/${params.id}`
         return httpClient(url).then(({ json }) => ({
             data: json,
         }));
     },
     getMany: (resource, params) => {
-        console.log("getMany. resource: " +resource + ' | params: ' + params);
-        console.log(params);
         let url;
-        if (resource === 'categories') {
-            url = `${woocommerceUrl}/wp-json/wc/v3/products/${resource}`;
-        } else {
-            const query = {include: Array(params.ids),};
-            url = `${woocommerceUrl}/wp-json/wc/v3/${resource}?${stringify(query)}`;
-        }
-        return httpClient(url).then(({ json }) => {console.log(json);return ({ data: json })});
+        const query = {include: Array(params.ids),};
+        url = `${woocommerceUrl}/wp-json/wc/v3/${resource}?${stringify(query)}`;
+        return httpClient(url).then(({ json }) => {return ({ data: json })});
     },
     getManyReference: (resource, params) => {
-        console.log("getManyReference. resource: "+resource + ' | params: ' + params);
-        console.log(params);
         const { field, order } = params.sort;
         let url;
         if (resource === 'products') {
@@ -130,22 +102,14 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
         else {
             url = `${woocommerceUrl}/wp-json/wc/v3/${resource}/${params.id}/${params.target}`;
         }
-        console.log(url);
-        return httpClient(url).then(({ headers, json }) => {console.log(json); return ({
+        return httpClient(url).then(({ headers, json }) => { return ({
             data: json,
             total: parseInt(headers.get('Content-Type')),
         })});
     },
     create: (resource, params) => {
-        console.log("create. resource: "+resource + ' | params: ' + params);
-        console.log(params);
         let url;
-        if (resource === 'categories') {
-            url = `${woocommerceUrl}/wp-json/wc/v3/products/${resource}`;
-        }
-        else {
-            url = `${woocommerceUrl}/wp-json/wc/v3/${resource}`;
-        }
+        url = `${woocommerceUrl}/wp-json/wc/v3/${resource}`;
         return httpClient(url, {
             method: 'POST',
             body: JSON.stringify(params.data),
@@ -154,18 +118,11 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
         }));
     },
     update: (resource, params) => {
-        console.log("update. resource: "+resource + ' | params: ' + params);
-        console.log(params);
         if (params.data.category) {
             params.data.categories = [{ id: params.data.category }];
         }
         let url;
-        if (resource === 'categories') {
-            url = `${woocommerceUrl}/wp-json/wc/v3/products/${resource}/${params.id}`;
-        }
-        else {
-            url = `${woocommerceUrl}/wp-json/wc/v3/${resource}/${params.id}`;
-        }
+        url = `${woocommerceUrl}/wp-json/wc/v3/${resource}/${params.id}`;
         return httpClient(url, {
             method: 'PUT',
             body: JSON.stringify(params.data),
@@ -182,10 +139,9 @@ export default ({woocommerceUrl, consumerKey, consumerSecret,
         ).then(responses => ({ data: responses.map(({ json }) => json.id) })),
     delete: (resource, params) => {
         let url;
-        if (resource === 'categories') { 
-            url = `${woocommerceUrl}/wp-json/wc/v3/products/${resource}/${params.id}?force=true`;
-        } else {
-            url = `${woocommerceUrl}/wp-json/wc/v3/${resource}/${params.id}`;
+        url = `${woocommerceUrl}/wp-json/wc/v3/${resource}/${params.id}`;
+        if (resource === 'products/categories') { 
+            url += `?force=true`;
         }
         return httpClient(url, {
             method: 'DELETE',
