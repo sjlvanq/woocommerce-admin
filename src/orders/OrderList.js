@@ -34,7 +34,7 @@ const OrderList = () => (
         filters={orderFilters}
         filterDefaultValues={{ status: 'processing' }}
         sort={{ order: 'desc' }}
-        queryOptions={{ refetchInterval: 3000 }}
+        queryOptions={{ refetchInterval: 5000 }}
     >
         <TabbedDatagrid />
     </List>
