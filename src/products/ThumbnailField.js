@@ -12,7 +12,7 @@ const Img = styled('img')({
 const ThumbnailField = (_: { source: string; label?: string }) => {
     const record = useRecordContext();
     if (!record) return null;
-    return <Img src={record.images[0].src} alt="" />;
+    return <Img src={record.images[0] && record.images[0].src} alt="" />;
 };
 
 export default ThumbnailField;

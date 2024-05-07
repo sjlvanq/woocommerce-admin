@@ -60,7 +60,9 @@ const LoadedGridList = () => {
                         type: 'edit',
                     })}
                 >
+                    {record.images[0] &&
                     <img src={record.images[0].src} alt="" />
+                    }
                     <ImageListItemBar
                         title={
                             <Typography
