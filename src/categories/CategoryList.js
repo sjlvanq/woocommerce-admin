@@ -1,12 +1,13 @@
-import { Box, Chip, useMediaQuery, Theme, Typography } from '@mui/material';
-import { ListBase, SimpleList, TopToolbar, SortButton, CreateButton, Title,
-FilterContext, FilterForm, Count, Pagination, List, ReferenceManyCount, Datagrid, TextField, BooleanField, NumberField, ShowButton, EditButton } from 'react-admin';
+import { useMediaQuery } from '@mui/material';
+import { ListBase, SimpleList, TopToolbar, CreateButton, Title,
+FilterContext, Datagrid, NumberField, EditButton } from 'react-admin';
 
 import CategoryRefField from './CategoryRefField';
 
 const ListActions = () => (
     <TopToolbar>
-        <SortButton fields={['name','count','menu_order']} label="Ordenar por" />
+        {/*<SortButton fields={['name','count','menu_order']} label="Ordenar por" />*/}
+        {/*Parámetro orderby sólo acepta id, include, name, slug, term_group, description and count*/}
         <CreateButton label="Nueva categoría" />   
     </TopToolbar>
 );
@@ -18,7 +19,7 @@ const CategoryList = () => {
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
     return (
     <ListBase
-        sort={{ field: 'menu_order', order: 'asc'}}
+        sort={{ field: 'name', order: 'asc'}}
     >
         <Title defaultTitle="Categorías" />
         <FilterContext.Provider value={categoryFilters}>
@@ -35,20 +36,20 @@ const CategoryList = () => {
         ? <SimpleList
             sort={{ field: 'menu_order', order: 'asc'}}
             primaryText={record => record.name}
-			secondaryText={record =>
-                <Typography component="span">
+			secondaryText={record => (
+                <>
                     {record.count} productos
-                </Typography>
-            }
-			tertiaryText={record => <Typography component="span">Orden: {record.menu_order}</Typography>}
+                </>
+            )}
+			tertiaryText={record => (<>Orden: {record.menu_order}</>)}
             linkType={record => "edit"}
             /*rowSx={record => ({ backgroundColor: record.nb_views >= 500 ? '#efe' : 'white' })}*/
         />
-        : <Datagrid basePath="/products/categories">
+        : <Datagrid>
             <CategoryRefField source="name" label="Nombre" />
             <NumberField source="count" label="Productos" />
-            <NumberField source="menu_order" label="Posición" />
-            <EditButton basePath="/categories" label="Editar" />
+            <NumberField source="menu_order" label="Posición" sortable={false} />
+            <EditButton label="Editar" />
           </Datagrid>
         }
         
