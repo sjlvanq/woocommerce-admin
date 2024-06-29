@@ -369,6 +369,7 @@ const EnviosPanel = () => {
     
     const onCreateEnvio = data => {
         notify("Nuevo envío programado");
+        setSelectedOrders([]);
         refresh();
     };
     
